@@ -11,7 +11,7 @@ Y = np.array(y).reshape(-1, 1)
 
 m = X.shape[0]
 X = np.c_[np.ones((m, 1)), X]  #to add x0 for theta0
-print(X)
+# print(X)
 
 def hypothesis(X, theta):
     return X.dot(theta)
@@ -24,8 +24,19 @@ def comp_deriv(X, y, theta):
     deriv = X.T.dot(hypothesis(X, theta) - y )
     return deriv
 
-def update_theta(theta, alpha, X, y, iterations):
+def grad_descent(theta, alpha, X, y, iterations):
     for i in range(iterations):
+        c = cost_func(X, y, theta)
         grad = comp_deriv(X, y, theta)
         theta = theta - alpha * grad
-        print(theta)
+        print(f" iteration no.: {i}, theta: {theta}, cost: {c}")
+
+        if np.isinf(c):
+            break
+
+n_features = X.shape[1]
+theta = np.zeros((n_features, 1))
+learning_rate = 0.00000001
+iterations = 1000
+
+grad_descent(theta, learning_rate, X, Y, iterations)
