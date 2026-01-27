@@ -23,20 +23,22 @@ def cost_func(X, y, theta):
 def comp_deriv(X, y, theta):
     deriv = X.T.dot(hypothesis(X, theta) - y )
     return deriv
+def main():
+    def grad_descent(theta, alpha, X, y, iterations):
+        for i in range(iterations):
+            c = cost_func(X, y, theta)
+            grad = comp_deriv(X, y, theta)
+            theta = theta - alpha * grad
+            print(f" iteration no.: {i}, theta: {theta}, cost: {c}")
+            if np.isinf(c):
+                break
 
-def grad_descent(theta, alpha, X, y, iterations):
-    for i in range(iterations):
-        c = cost_func(X, y, theta)
-        grad = comp_deriv(X, y, theta)
-        theta = theta - alpha * grad
-        print(f" iteration no.: {i}, theta: {theta}, cost: {c}")
-
-        if np.isinf(c):
-            break
+    grad_descent(theta, learning_rate, X, Y, iterations)
 
 n_features = X.shape[1]
 theta = np.zeros((n_features, 1))
 learning_rate = 0.00000001
 iterations = 1000
 
-grad_descent(theta, learning_rate, X, Y, iterations)
+if __name__ == '__main__':
+    main()
