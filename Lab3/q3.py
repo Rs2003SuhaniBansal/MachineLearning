@@ -1,10 +1,11 @@
 import pandas as pd
 import numpy as np
+from sklearn.metrics import r2_score
 
 data = pd.read_csv("/home/ibab/simulated_data_multiple_linear_regression_for_ML.csv")
 
-x = data.drop(columns=["disease_score_fluct"])
-y = data["disease_score_fluct"]
+x = data.drop(columns=["disease_score_fluct", "disease_score"])
+y = data["disease_score"]
 
 X = np.array(x)
 Y = np.array(y).reshape(-1, 1)
@@ -24,21 +25,25 @@ def comp_deriv(X, y, theta):
     deriv = X.T.dot(hypothesis(X, theta) - y )
     return deriv
 def main():
-    def grad_descent(theta, alpha, X, y, iterations):
+    def grad_descent(alpha, X, y, iterations):
+        n_features = X.shape[1]
+        theta = np.zeros((n_features, 1))
         for i in range(iterations):
-            c = cost_func(X, y, theta)
             grad = comp_deriv(X, y, theta)
-            theta = theta - alpha * grad
-            print(f" iteration no.: {i}, theta: {theta}, cost: {c}")
-            if np.isinf(c):
-                break
 
-    grad_descent(theta, learning_rate, X, Y, iterations)
+            theta = theta - (alpha * grad)
 
-n_features = X.shape[1]
-theta = np.zeros((n_features, 1))
-learning_rate = 0.00000001
-iterations = 1000
+            if i % 200 == 0:
+                cost = cost_func(X, y, theta)
+                print(f"Iteration {i}, Cost: {cost:.4f}")
+        return theta
+
+    theta_updated = grad_descent(0.000001, X, Y, 1000)
+    print(theta_updated)
+
+    y_pred = hypothesis(X, theta_updated)  # predictions
+    r2 = r2_score(y, y_pred)
+    print("R² Score:", r2)
 
 if __name__ == '__main__':
     main()

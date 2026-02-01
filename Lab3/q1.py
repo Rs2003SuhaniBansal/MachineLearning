@@ -7,7 +7,7 @@ from sklearn.metrics import r2_score
 def main():
     #Loading the data
     data = pd.read_csv("/home/ibab/simulated_data_multiple_linear_regression_for_ML.csv")
-    print(data.head())
+    # print(data.head())
 
     #Dividing it into training set and test set
     X = data.drop(columns=["disease_score"])
