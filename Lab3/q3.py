@@ -39,7 +39,7 @@ def main():
         return theta
 
     theta_updated = grad_descent(0.000001, X, Y, 1000)
-    print(theta_updated)
+    print(f"theta values: \n{theta_updated}")
 
     y_pred = hypothesis(X, theta_updated)  # predictions
     r2 = r2_score(y, y_pred)

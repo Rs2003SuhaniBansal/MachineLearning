@@ -28,6 +28,7 @@ def main():
     # print r2 score
     r2 = r2_score(y_test, pred_y)
     print("R² Score:", r2)
+    print("theta values:", model.coef_)
 
 
 if __name__ == '__main__':

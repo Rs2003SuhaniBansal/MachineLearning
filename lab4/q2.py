@@ -1,30 +1,26 @@
 from Lab3 import q3
 from Lab3 import q1
 from Lab2 import q3 as Q3
-import pandas as pd
 import numpy as np
 from sklearn.metrics import r2_score
 from sklearn.datasets import fetch_california_housing
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 
 print(f"\nData from my implementation for california housing dataset:")
 
-data = fetch_california_housing(as_frame=True)
-df = data.frame
-df.to_csv("california_housing_sklearn.csv", index=False)
+[X, y] = fetch_california_housing(return_X_y=True)
+y = y.reshape(-1, 1)
 
-data = pd.read_csv("california_housing_sklearn.csv")
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=999)
 
-x = data.drop("MedHouseVal", axis=1).values
-y = data["MedHouseVal"].values.reshape(-1, 1)
+scaler=StandardScaler()
+scaler=scaler.fit(X_train)
+X_train=scaler.transform(X_train)
+X_test=scaler.transform(X_test)
 
-X = np.array(x)
-Y = np.array(y).reshape(-1, 1)
-
-X = (X - X.mean(axis=0)) / X.std(axis=0)
-
-m = X.shape[0]
-X = np.c_[np.ones((m, 1)), X]  #to add x0 for theta0
-# print(X)
+X_train = np.c_[np.ones((X_train.shape[0], 1)), X_train]
+X_test = np.c_[np.ones((X_test.shape[0], 1)), X_test]
 
 def hypothesis(X, theta):
     return X.dot(theta)
@@ -35,8 +31,10 @@ def cost_func(X, y, theta):
     return cost
 
 def comp_deriv(X, y, theta):
+    m = len(y)
     deriv = (1/m) * X.T.dot(hypothesis(X, theta) - y )
     return deriv
+
 def main():
     def grad_descent(alpha, X, y, iterations):
         n_features = X.shape[1]
@@ -50,12 +48,13 @@ def main():
                 cost = cost_func(X, y, theta)
                 print(f"Iteration {i}, Cost: {cost:.4f}")
         return theta
+    theta_updated = grad_descent(0.01, X_train, y_train, 5000)
+    print(f"theta values: \n {theta_updated}")
 
-    theta_updated = grad_descent(0.01, X, Y, 3000)
-    print(theta_updated)
-
-    y_pred = hypothesis(X, theta_updated)  # predictions
-    r2 = r2_score(y, y_pred)
+    # y_pred = hypothesis(X_train_scale, theta_updated)  # predictions
+    pred_y = hypothesis(X_test, theta_updated)
+    print(f"Predicted MedHouseVal value: \n {pred_y}")
+    r2 = r2_score(y_test, pred_y)
     print("R² Score:", r2)
 
 if __name__ == '__main__':
