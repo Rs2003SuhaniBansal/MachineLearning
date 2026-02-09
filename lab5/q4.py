@@ -19,6 +19,7 @@ def main():
     X_test = np.c_[np.ones((X_test.shape[0], 1)), X_test]
 
     # initializing the model
+    """using the logistic regression model from scikit learn"""
     model = LogisticRegression()
 
     # training a model
@@ -27,6 +28,8 @@ def main():
     pred_y = model.predict(X_test)
     print(f"Predicted MedHouseVal value: \n {pred_y}")
 
+    """Checking the accuracy of the predicted values by the model since it is a classification
+    problem and prediction doesn't have numerical values."""
     accuracy = accuracy_score(y_test, pred_y)
     print("Accuracy:", accuracy)
 
