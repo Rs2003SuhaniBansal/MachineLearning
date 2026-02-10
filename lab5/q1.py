@@ -43,7 +43,7 @@ def comp_deriv(X, y, theta): #gradient
     and the true value (y) which is then reshaped to restore the dimensions
     this is put inside the iteration loop so that again a random sample is generated.
     this ensures that the predicted values of y remain constant."""
-np.random.seed(42)
+
 def main():
     def grad_descent(alpha, X, y, iterations):
         theta = np.zeros((X.shape[1], 1))
