@@ -31,4 +31,5 @@ def main():
         print(f"Left Partition (BP <= {t}): {len(left)} samples")
         print(f"Right Partition (BP > {t}): {len(right)} samples")
 
-
+if __name__ == '__main__':
+    main()
