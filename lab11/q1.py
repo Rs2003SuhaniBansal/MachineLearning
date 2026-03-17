@@ -51,7 +51,8 @@ def best_split(X, y):
     for feature in range(n_features):
         """here we are looping through every feature."""
 
-        thresholds = np.unique(X[:, feature])
+        values = np.unique(X[:, feature])
+        thresholds = (values[:-1] + values[1:]) / 2
         """all unique values of that feature are found 
         and are tested as a possible split threshold"""
 
